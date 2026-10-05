@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employee Registry</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Left registry panel: branding + live ID badge preview -->
+  <aside class="registry-panel">
+    <div class="brand">
+      <span class="brand-mark">EM</span>
+      <span class="brand-name">Registry</span>
+    </div>
+
+    <h1>Employee Registration</h1>
+    <p class="lede">Add a new employee to the company registry. Fields marked with an asterisk are required.</p>
+
+    <div class="badge-preview">
+      <p class="badge-preview-label">Badge preview</p>
+      <div class="badge">
+        <div class="badge-stripe"></div>
+        <div class="badge-photo">＋</div>
+        <div class="badge-name" id="badgeName">Full name</div>
+        <div class="badge-dept" id="badgeDept">Department —</div>
+        <div class="badge-id" id="badgeId">ID —</div>
+      </div>
+    </div>
+
+    <div class="stat">
+      <span class="stat-value" id="employeeCount">0</span>
+      <span class="stat-label">employees on file</span>
+    </div>
+  </aside>
+
+  <!-- Right panel: form + directory table -->
+  <main class="form-panel">
+
+    <form id="employeeForm" novalidate>
+
+      <section class="field-group">
+        <p class="eyebrow">Personal details</p>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="employeeId">Employee ID <span class="req">*</span></label>
+            <input type="text" id="employeeId" name="employee_id" placeholder="e.g. EMP-1042" autocomplete="off" required>
+            <span class="error-text" data-error-for="employee_id"></span>
+          </div>
+          <div class="field">
+            <label for="fullName">Full Name <span class="req">*</span></label>
+            <input type="text" id="fullName" name="full_name" placeholder="e.g. Asha Patel" autocomplete="off" required>
+            <span class="error-text" data-error-for="full_name"></span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Gender <span class="req">*</span></label>
+          <div class="radio-row" role="radiogroup" aria-label="Gender">
+            <label class="radio-pill">
+              <input type="radio" name="gender" value="Male" required>
+              <span>Male</span>
+            </label>
+            <label class="radio-pill">
+              <input type="radio" name="gender" value="Female">
+              <span>Female</span>
+            </label>
+            <label class="radio-pill">
+              <input type="radio" name="gender" value="Other">
+              <span>Other</span>
+            </label>
+          </div>
+          <span class="error-text" data-error-for="gender"></span>
+        </div>
+      </section>
+
+      <section class="field-group">
+        <p class="eyebrow">Contact information</p>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="email">Email Address <span class="req">*</span></label>
+            <input type="email" id="email" name="email" placeholder="name@company.com" autocomplete="off" required>
+            <span class="error-text" data-error-for="email"></span>
+          </div>
+          <div class="field">
+            <label for="phone">Phone Number <span class="req">*</span></label>
+            <input type="tel" id="phone" name="phone" placeholder="e.g. +1 555 123 4567" autocomplete="off" required>
+            <span class="error-text" data-error-for="phone"></span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="address">Address <span class="req">*</span></label>
+          <textarea id="address" name="address" rows="3" placeholder="Street, city, state, ZIP" required></textarea>
+          <span class="error-text" data-error-for="address"></span>
+        </div>
+      </section>
+
+      <section class="field-group">
+        <p class="eyebrow">Employment details</p>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="department">Department <span class="req">*</span></label>
+            <select id="department" name="department" required>
+              <option value="" disabled selected>Select department</option>
+              <option value="HR">HR</option>
+              <option value="Finance">Finance</option>
+              <option value="IT">IT</option>
+              <option value="Sales">Sales</option>
+            </select>
+            <span class="error-text" data-error-for="department"></span>
+          </div>
+          <div class="field">
+            <label for="dateOfJoining">Date of Joining <span class="req">*</span></label>
+            <input type="date" id="dateOfJoining" name="date_of_joining" required>
+            <span class="error-text" data-error-for="date_of_joining"></span>
+          </div>
+        </div>
+
+        <div class="field field-narrow">
+          <label for="salary">Salary (USD) <span class="req">*</span></label>
+          <input type="number" id="salary" name="salary" min="0" step="0.01" placeholder="e.g. 65000" required>
+          <span class="error-text" data-error-for="salary"></span>
+        </div>
+      </section>
+
+      <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
+
+      <div class="form-actions">
+        <button type="button" id="clearBtn" class="btn btn-ghost">Clear form</button>
+        <button type="submit" id="submitBtn" class="btn btn-primary">
+          <span class="btn-label">Save employee</span>
+        </button>
+      </div>
+    </form>
+
+    <section class="directory">
+      <div class="directory-head">
+        <h2>Employee Directory</h2>
+        <span class="directory-count" id="directoryCount">0 records</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Department</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Joined</th>
+              <th>Salary</th>
+              <th aria-label="Actions"></th>
+            </tr>
+          </thead>
+          <tbody id="employeeTableBody">
+            <tr class="empty-row"><td colspan="8">No employees registered yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
